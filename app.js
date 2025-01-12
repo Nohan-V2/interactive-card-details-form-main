@@ -15,8 +15,7 @@ const $numberErrorMessage = document.querySelector(".number-error-message");
 const $dateErrorMessage = document.querySelector(".date-error-message");
 const $CvcErrorMessage = document.querySelector(".cvc-error-message");
 
-console.log($cardHolderName); // 2. J'affiche l'élément dans la console
-console.log($cardHolder);
+// 2. J'affiche l'élément dans la console
 
 $cardHolderName.addEventListener("input", function (e) {
   e.target.value = e.target.value.replace(/[^a-zA-Z\s]/g, ""); // Remplace tous les caractères non alphabétiques
@@ -122,8 +121,6 @@ $cardEnterCvc.addEventListener("keyup", function (e) {
 });
 
 $confirmButton.addEventListener("click", function (e) {
-  e.preventDefault();
-
   let isValid = true;
 
   if ($cardHolderName.value.length < 2) {
@@ -140,7 +137,14 @@ $confirmButton.addEventListener("click", function (e) {
     $numberErrorMessage.classList.add("hidden");
   }
 
-  if ($cardGetMonth.value === "" || $cardGetYears.value === "") {
+  if (
+    $cardGetMonth.value.length !== 2 ||
+    $cardGetMonth.value > 12 ||
+    $cardGetMonth.value < 1 ||
+    $cardGetYears.value.length !== 2 ||
+    $cardGetYears.value < 25 ||
+    $cardGetYears.value > 29
+  ) {
     $dateErrorMessage.classList.remove("hidden");
     isValid = false;
   } else {
@@ -155,14 +159,17 @@ $confirmButton.addEventListener("click", function (e) {
   }
 
   if (isValid) {
-    alert("Merci pour votre enregistrement !");
     console.log($cardHolderName.value);
     console.log($cardNumberInput.value);
     console.log($cardGetMonth.value);
     console.log($cardGetYears.value);
     console.log($cardEnterCvc.value);
+
+    alert("Merci pour votre enregistrement !");
+
     return true;
   } else {
+    e.preventDefault();
     return false;
   }
 });
